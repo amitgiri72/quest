@@ -22,9 +22,7 @@
 }
 
 
-.light-mode .navbar {
-  /* Styles specific to light mode */
-}
+
 
 
 .navbar {
@@ -60,7 +58,11 @@
 }
 
 .nav-logo {
-  padding: 5px 25px;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 0 5px;
+  margin: 0;
+
 }
 
 .nav-item {
@@ -144,7 +146,7 @@
 }
 
 @media screen and (max-width: 1120px) {
-  .navbar .navbar-1 form {
+  .navbar .navbar-1 {
     display: none;
   }
 }
@@ -156,7 +158,56 @@
 }
 
 @media screen and (max-width: 950px) {
-  .navbar .navbar-1 .res-nav {
+  .navbar .navbar-1 {
     display: none;
   }
 }
+/* Add this CSS to handle menu visibility */
+@media screen and (max-width: 760px) {
+  .navbar .navbar-1.show-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50px; /* Adjust this value based on your design */
+    left: 0;
+    width: 100%;
+    background-color: #f8f9f9;
+    z-index: 10;
+  }
+  .navbar .navbar-1.show-menu {
+    
+    background-color: #302f31;
+    color: #bb36ef;
+    
+  }
+
+  .navbar .navbar-1.show-menu .nav-item {
+    padding: 15px; /* Adjust this value based on your design */
+    text-align: center; /* Center the text in each menu item */
+    color: #a75cb8;
+  }
+  .dark-mode .navbar .navbar-1.show-menu .nav-item {
+
+    color: #a75cb8;
+  }
+
+  .nav-item:hover,
+.slide-in-icon:hover {
+  background-color: rgb(226, 226, 226);
+}
+.dark-mode .nav-item:hover,
+.slide-in-icon:hover {
+  background-color: rgb(40, 44, 45);
+}
+}
+
+/* Add this CSS to handle menu open state */
+.main-nav.menu-open {
+  background-color: #f8f9f9; /* Adjust this value based on your design */
+}
+
+.dark-mode .main-nav.menu-open {
+  background-color: #77711a /* Adjust this value based on your design */
+}
+

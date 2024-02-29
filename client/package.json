@@ -31,6 +31,7 @@
     "ua-parser-js": "^1.0.37",
     "useragent": "^2.3.0",
     "util": "^0.12.5",
+    "video-react": "^0.16.0",
     "vm-browserify": "^1.1.2",
     "web-vitals": "^2.1.4"
   },

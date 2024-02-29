@@ -1,0 +1,24 @@
+.video-player {
+    width: 40vw;
+    
+    margin: 20vh auto;
+    text-align: center;
+}
+
+.video{
+    height: 100vh;
+    background-color: #e5f0f5;
+}
+.dark-mode .video{
+    background-color: #131516;
+}
+
+@media screen and (max-width: 820px) {
+  .video-player {
+    width: 100%;
+    
+    /* margin: 20vh auto; */
+    justify-content: center;
+    align-items: center;
+}
+}

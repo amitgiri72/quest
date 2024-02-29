@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react'
+import React, { useEffect, useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import toast from 'react-hot-toast'
@@ -13,90 +13,94 @@ import bars from "../../assets/bars-solid.svg";
 import './Navbar.css'
 
 
-const Navbar = ({ setIsOpen }) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const User = useSelector((state) => (state.currentUserReducer))
+// ... (import statements)
+
+const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.currentUserReducer);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    dispatch({type: 'LOGOUT'})
-    toast.success('Logged out successfully')
-    navigate('/')
-    dispatch(setCurrentUser(null))
-  }
+    dispatch({ type: 'LOGOUT' });
+    toast.success('Logged out successfully');
+    navigate('/');
+    dispatch(setCurrentUser(null));
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
 
   useEffect(() => {
-    const token = User?.token;
+    const token = user?.token;
     if (token) {
       const decodedToken = decode(token);
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         handleLogout();
       }
     }
-    // dispatch(setCurrentUser(JSON.parse(localStorage.getItem('Profile'))))
-    if (User?.result) {
+    if (user?.result) {
       dispatch(setCurrentUser(JSON.parse(localStorage.getItem('Profile'))));
     }
-  // eslint-disable-next-line
-  }, [User?.token, dispatch])
-  
+  }, [user?.token, dispatch]);
 
   return (
-    <nav className="main-nav">
+    <nav className={`main-nav ${isMenuOpen ? 'menu-open' : ''}`}>
       <div className="navbar">
-        <button className="slide-in-icon">
+        <button className="slide-in-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <img src={bars} alt="bars" width="15" />
         </button>
-        <div className="navbar-1">
-          <Link to="/" className="nav-item nav-logo">
-           
+        <div className={`navbar-1 ${isMenuOpen ? 'show-menu' : ''}`}>
+          <Link to="/" className="nav-item nav-logo" onClick={closeMenu}>
             <h1>QUEST</h1>
           </Link>
-          <Link className="nav-item nav-btn res-nav" 
-            onClick={() => setIsOpen(prev => !prev)}
-          >
-              Chatbot
-            </Link>
-            <Link to="/" className="nav-item nav-btn res-nav">
-              Community
-            </Link>
+          <Link to="/player" className="nav-item nav-btn res-nav" onClick={closeMenu}>
+            Player
+          </Link>
+          <Link to="/" className="nav-item nav-btn res-nav" onClick={closeMenu}>
+            Community
+          </Link>
         </div>
         <div className="navbar-2">
           <form>
             <input type="text" placeholder="   Search..." />
             <img src={search} alt="search" width="18" className="search-icon" />
           </form>
-          {
-            User === null ? (
-              <Link to={'/Auth'} className='nav-item nav-links'>
-                Log In
-              </Link>
-            ) : (
-              <>
-                <Avatar
-                  backgroundColor="#009dff"
-                  px="10px"
-                  py="7px"
-                  borderRadius="50%"
-                  color="white"
+          {user === null ? (
+            <Link to={'/Auth'} className="nav-item nav-links" onClick={closeMenu}>
+              Log In
+            </Link>
+          ) : (
+            <>
+              <Avatar
+                backgroundColor="#009dff"
+                px="10px"
+                py="7px"
+                borderRadius="50%"
+                color="white"
+              >
+                <Link
+                  to={`/Users/${user?.result?._id}`}
+                  style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                  }}
                 >
-                  <Link
-                    to={`/Users/${User?.result?._id}`}
-                    style={{
-                      color: "white", textDecoration: "none"
-                    }}
-                  >
-                    {User.result.name.charAt(0).toUpperCase()}
-                  </Link>
-                </Avatar>
-                <button className='nav-item nav-links' onClick={handleLogout}>Log Out</button>
-              </>
-            )
-          }
+                  {user.result.name.charAt(0).toUpperCase()}
+                </Link>
+              </Avatar>
+              <button className="nav-item nav-links" onClick={() => { closeMenu(); handleLogout(); }}>
+                Log Out
+              </button>
+            </>
+          )}
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
+
