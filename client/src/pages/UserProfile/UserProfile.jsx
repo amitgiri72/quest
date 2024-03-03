@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBirthdayCake, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faBirthdayCake, faCertificate, faPen, faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import axios from 'axios';
 import LeftSidebar from "../../components/LeftSidebar/LeftSidebar";
@@ -25,7 +25,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserHistory = async () => {
       try {
-        const response = await axios.get(`https://quest-15hg.onrender.com/user/history/${id}`);
+        const response = await axios.get(`http://localhost:8080/user/history/${id}`);
         setUserHistory(response.data.loginHistory);
         setLoadingHistory(false);
       } catch (error) {
@@ -80,10 +80,20 @@ const UserProfile = () => {
                   {currentProfile?.name.charAt(0).toUpperCase()}
                 </Avatar>
                 <div className="user-name">
-                  <h1>{currentProfile?.name}</h1>
+                  <h1>
+                    {currentProfile?.name}
+               </h1>
                   <p>
                     <FontAwesomeIcon icon={faBirthdayCake} /> Joined{" "}
                     {moment(currentProfile?.joinedOn).fromNow()}
+                  </p>
+                  <p>
+                    <FontAwesomeIcon icon={faCertificate} /> Ranking - {" "}
+                   {currentProfile?.badges && currentProfile.badges.length > 0 && ` ${currentProfile.badges[currentProfile.badges.length - 1]}`}
+                  </p>
+                  <p>
+                    <FontAwesomeIcon icon={faPiggyBank} /> Points - {" "}
+                    {currentProfile?.points}
                   </p>
                 </div>
               </div>

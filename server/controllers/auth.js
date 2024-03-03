@@ -5,7 +5,7 @@ import Users from '../models/auth.js'
 import LoginHistory from "../models/loginHistory.js";
 
 export const signUpController = async (req, res) => {
-  const { name, email, password } = req.body
+  const { name, email, password,answer } = req.body
   try {
     const existingUser = await Users.findOne({ email })
     if (existingUser) {
@@ -16,7 +16,7 @@ export const signUpController = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10)
     const newUser = await Users.create({
-      name, email, password: hashedPassword
+      name, email, password: hashedPassword, answer
     })
     const token = jwt.sign({
       email: newUser.email,
@@ -74,3 +74,44 @@ export const logInController = async (req, res) => {
     res.status(500).json("Something went wrong...")
   }
 }
+
+//forgot passwordController
+export const forgotPasswordController = async (req, res) => {
+  try {
+    const { email, answer, newPassword } = req.body;
+
+    if (!email) {
+      res.status(400).send({ message: "Email is required!" });
+    }
+    if (!answer) {
+      res.status(400).send({ message: "Answer is required!" });
+    }
+    if (!newPassword) {
+      res.status(400).send({ message: "New Password is required!" });
+    }
+
+    //check
+    const user = await Users.findOne({ email, answer });
+    //validation
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "Wrong Email or Answer",
+      });
+    }
+    // const hashed = await hashPassword(newPassword);
+    const hashed = await bcrypt.hash(newPassword, 10)
+    await Users.findByIdAndUpdate(user._id, { password: hashed });
+    res.status(200).send({
+      success: true,
+      message: "Password Reset Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
+  }
+};

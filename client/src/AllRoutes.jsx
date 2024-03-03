@@ -7,18 +7,22 @@ import DisplayQuestion from './pages/Questions/DisplayQuestion'
 import Tags from './pages/Tags/Tags'
 import Users from "./pages/Users/Users"
 import UserProfile from "./pages/UserProfile/UserProfile"
+import VideoPlayer from './pages/player/VideoPlayer'
+import ForgetPassword from './pages/Auth/ForgetPassword'
 
 const AllRoutes = () => {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/Auth' element={<Auth />} />
+      <Route path="/forgetpassword" element={<ForgetPassword />} />
       <Route path='/AskQuestion' element={<AskQuestion />} />
       <Route path='/Questions' element={<Questions />} />
       <Route path='/Questions/:id' element={<DisplayQuestion />} />
       <Route path='/Tags' element={<Tags />} />
       <Route path='/Users' element={<Users />} />
       <Route path='/Users/:id' element={<UserProfile />} />
+      <Route path="/player" element={<VideoPlayer />} />
     </Routes>
   )
 }

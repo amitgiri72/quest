@@ -1,4 +1,5 @@
 import Questions from "../models/questions.js";
+import Users from '../models/auth.js'
 import mongoose from "mongoose";
 
 export const askQuestion = async (req, res) => {
@@ -48,6 +49,17 @@ export const voteQuestion = async (req, res) => {
 
   try {
     const question = await Questions.findById(_id);
+
+    // Check if the user has already upvoted the question
+    const hasUpvoted = question.upVote.includes(userId);
+
+    // Reward user for getting an upvote on their question
+    if (value === 'upVote' && !hasUpvoted) {
+      const user = await Users.findById(question.userId);
+      user.points += 10; // Adjust the points as per your preference
+      await user.save();
+    }
+
     /*
     When a user votes on a question, the function checks if the user has already upvoted or downvoted the question by checking if their userId is in the respective array. If the user has already voted in the opposite way (e.g. they previously downvoted but now want to upvote), their userId is removed from the opposite array. If the user has not already voted in the same way (e.g. they have not already upvoted and now want to upvote), their userId is added to the respective array. If the user has already voted in the same way, their userId is removed from the respective array, effectively canceling their previous vote.
     */
@@ -84,5 +96,6 @@ export const voteQuestion = async (req, res) => {
     res.status(200).json({ message: "Voted successfully..." });
   } catch (error) {
     res.status(404).json({ message: "Id not found" });
+    console.log(error)
   }
 };

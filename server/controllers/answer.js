@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Users from '../models/auth.js'
 import Questions from "../models/questions.js";
 
 export const postAnswer = async (req, res) => {
@@ -9,17 +10,42 @@ export const postAnswer = async (req, res) => {
     return res.status(404).send('Question unavailable...')
   }
 
-  updateNoofQuestions(_id, noOfAnswers)
   try {
-    const updatedQuestion = await Questions.findByIdAndUpdate(_id, {
-      $addToSet: {
-        answer: [{
-          answerBody, userAnswered, userId
-        }]
-      }})
-    res.status(200).json(updatedQuestion);
+    // Reward user for answering the question
+    const user = await Users.findById(userId);
+    user.points += 5; // Adjust the points as per your preference
+    user.answersGiven += 1;
+
+    // Check if the user has achieved a badge
+    if (user.answersGiven === 5 && !user.badges.includes('Elite Explorer')) {
+      user.badges.push('Elite Explorer');
+    } else if (user.answersGiven === 20 && !user.badges.includes('Master Explorer')) {
+      user.badges.push('Master Explorer');
+    } else if (user.answersGiven > 20 && !user.badges.includes('Community Champion')) {
+      user.badges.push('Community Champion');
+    }
+
+    await user.save();
+       // Update the question with the new answer
+       const updatedQuestion = await Questions.findByIdAndUpdate(
+        _id,
+        {
+          $addToSet: {
+            answer: [{ answerBody, userAnswered, userId }],
+          },
+          $set: {
+            noOfAnswers: noOfAnswers,
+          },
+        },
+        { new: true }
+      );
+  
+      res.status(200).json({ updatedQuestion, user });
+
+  
   } catch (error) {
     res.status(400).json("Error while updating");
+    console.log(error)
   }
 }
 

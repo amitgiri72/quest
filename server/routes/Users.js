@@ -1,5 +1,5 @@
 import express from 'express'
-import { logInController, signUpController } from '../controllers/auth.js'
+import { forgotPasswordController, logInController, signUpController } from '../controllers/auth.js'
 import { getAllUsers, updateProfile } from '../controllers/users.js'
 
 
@@ -13,6 +13,8 @@ router.post('/signup', signUpController)
 
 router.post('/login', logInController)
 // router.post('/login', auth, userLoginMiddleware, logInController);
+// Forgot password|| POST
+router.post("/forgot-password", forgotPasswordController);
 
 router.get('/getAllUsers', getAllUsers)
 router.get('/history/:userId', getLoginHistory )

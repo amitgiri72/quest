@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import AboutAuth from "./AboutAuth";
 import toast from "react-hot-toast";
@@ -12,7 +12,7 @@ const Auth = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [answer, setAnswer] = useState('');
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -21,7 +21,12 @@ const Auth = () => {
     setName("");
     setEmail("");
     setPassword("");
+    setAnswer("");
   }
+  const handleForgetPassword = () => {
+    // Navigate to the forget password route
+    navigate('/forgetpassword');
+  };
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!email && !password) {
@@ -31,7 +36,7 @@ const Auth = () => {
       if (!name) {
         return toast.error("Please enter name")
       }
-      dispatch(signup({ name, email, password }, navigate))
+      dispatch(signup({ name, answer,email, password }, navigate))
       toast.success('Redirecting...')
       toast.success('User registered successfully')
       toast.success('Logged in successfully')
@@ -51,6 +56,7 @@ const Auth = () => {
         <h1>QUEST</h1>
         <form onSubmit={handleSubmit}>
           {isSignup && (
+            <>
             <label htmlFor="name">
               <h4>Name</h4>
               <input
@@ -63,6 +69,16 @@ const Auth = () => {
                 }}
               />
             </label>
+            <label htmlFor="answer">
+          <h4>What is your best friend's name?</h4>
+          <input
+            type="text"
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+          />
+        </label>
+            </>
+            
           )}
           <label htmlFor="email">
             <h4>Email</h4>
@@ -76,16 +92,20 @@ const Auth = () => {
               }}
             />
           </label>
+          
           <label htmlFor="password">
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h4>Password</h4>
               {!isSignup && (
+                <Link to="/forgetpassword" onClick={handleForgetPassword}>
                 <p style={{ color: "#007ac6", fontSize: "13px" }}>
                   Forgot password?
                 </p>
-              )}
-            </div>
+                </Link>
+              )} 
+             </div>
             <input
+              
               type="password"
               name="password"
               id="password"
