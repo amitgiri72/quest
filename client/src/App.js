@@ -7,6 +7,7 @@ import AllRoutes from "./AllRoutes";
 import { fetchAllQuestions } from "./actions/question";
 import { fetchAllUsers } from "./actions/users";
 import { Toaster } from 'react-hot-toast';
+import LocationMap from "./pages/map/LocationMap";
 
 
 
@@ -17,6 +18,8 @@ function App() {
 
   const [isDarkMode, setIsDarkMode] = useState(false);
   const dispatch = useDispatch()
+
+  const apiKey = 'AIzaSyBiS5GL_gAfNF20oUhcUi6iPh9WvYG_Vs8';
 
   useEffect(() => {
     dispatch(fetchAllQuestions())
@@ -34,6 +37,7 @@ function App() {
       <Router>
         <Toaster />
         <Navbar setIsOpen={setIsOpen}/>
+        {/* <LocationMap apiKey={apiKey} /> */}
         <AllRoutes />
         
       </Router>

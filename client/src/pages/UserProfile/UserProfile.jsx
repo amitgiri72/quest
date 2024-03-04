@@ -11,6 +11,7 @@ import EditProfileForm from "./EditProfileForm";
 import ProfileBio from "./ProfileBio";
 import "./UserProfile.css";
 import UAParser from 'ua-parser-js';
+import LocationMap from "../map/LocationMap";
 
 // import useragent from 'useragent'; 
 const UserProfile = () => {
@@ -21,6 +22,7 @@ const UserProfile = () => {
   const [Switch, setSwitch] = useState(false);
   const [userHistory, setUserHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
+  const apiKey = 'AIzaSyBiS5GL_gAfNF20oUhcUi6iPh9WvYG_Vs8';
 
   useEffect(() => {
     const fetchUserHistory = async () => {
@@ -116,6 +118,7 @@ const UserProfile = () => {
               ) : (
                 <>
                   <ProfileBio currentProfile={currentProfile} />
+                  <LocationMap apiKey={apiKey} />
                   <div className="user-history-container">
                     <h2>User Login History</h2>
                     {loadingHistory ? (
