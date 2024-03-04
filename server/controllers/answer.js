@@ -13,7 +13,7 @@ export const postAnswer = async (req, res) => {
   try {
     // Reward user for answering the question
     const user = await Users.findById(userId);
-    user.points += 5; // Adjust the points as per your preference
+    
     user.answersGiven += 1;
 
     // Check if the user has achieved a badge
@@ -23,6 +23,10 @@ export const postAnswer = async (req, res) => {
       user.badges.push('Master Explorer');
     } else if (user.answersGiven > 20 && !user.badges.includes('Community Champion')) {
       user.badges.push('Community Champion');
+    }
+    // if the user has answered 5 questions and reward with 5 points
+    if (user.answersGiven % 5 === 0 && user.answersGiven > 0) {
+      user.points += 5;
     }
 
     await user.save();

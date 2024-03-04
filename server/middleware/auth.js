@@ -20,7 +20,7 @@ const auth = async (req, res, next) => {
     }
 
     req.user = user; // Set the user information in req.user
-    console.log('User authenticated:', user);
+    // console.log('User authenticated:', user);
     next();
   } catch (error) {
     console.error('Authentication error:', error.message);

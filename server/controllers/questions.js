@@ -53,11 +53,15 @@ export const voteQuestion = async (req, res) => {
     // Check if the user has already upvoted the question
     const hasUpvoted = question.upVote.includes(userId);
 
-    // Reward user for getting an upvote on their question
+     // Reward user for getting an upvote on their question
     if (value === 'upVote' && !hasUpvoted) {
-      const user = await Users.findById(question.userId);
-      user.points += 10; // Adjust the points as per your preference
-      await user.save();
+      // Check if the question has received 5 upvotes
+      if (question.upVote.length + 1 === 5) {
+        const user = await Users.findById(question.userId);
+        user.points += 10; // Reward user with 10 points
+        await user.save();
+        res.status(200).json({ message: 'Voted successfully and user rewarded with 10 points.' });
+      }
     }
 
     /*
