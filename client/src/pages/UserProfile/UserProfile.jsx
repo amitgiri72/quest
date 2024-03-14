@@ -22,7 +22,7 @@ const UserProfile = () => {
   const [Switch, setSwitch] = useState(false);
   const [userHistory, setUserHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
-  const apiKey = 'AIzaSyBiS5GL_gAfNF20oUhcUi6iPh9WvYG_Vs8';
+  const apiKey = '';
 
   useEffect(() => {
     const fetchUserHistory = async () => {
